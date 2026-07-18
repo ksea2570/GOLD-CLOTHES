@@ -571,3 +571,54 @@ footer .dorado { color: var(--dorado); font-weight: 700; }
   .search-results { left: 6vw; right: 6vw; }
   .nav-logo-img { height: 38px; }
 }
+
+/* ---------- SELECT CATEGORÍA EN BÚSQUEDA ---------- */
+.search-select {
+  border: none;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--negro);
+  background: transparent;
+  cursor: pointer;
+  padding-right: 4px;
+  border-right: 1px solid var(--linea);
+  margin-right: 6px;
+  max-width: 140px;
+}
+
+/* ---------- WHATSAPP FLOTANTE ---------- */
+.wa-float {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 998;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #25D366;
+  color: #fff;
+  padding: 14px 20px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.wa-float:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(37,211,102,0.5);
+}
+.wa-float svg {
+  width: 22px;
+  height: 22px;
+  fill: #fff;
+  flex-shrink: 0;
+}
+@media (max-width: 860px) {
+  .wa-float { bottom: 20px; right: 20px; padding: 13px 16px; }
+  .wa-float span { display: none; }
+}
