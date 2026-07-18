@@ -1,38 +1,93 @@
 /* ==========================================
    GOLD CLOTHES — Lógica principal
    ========================================== */
-
 (function () {
 
   const grid       = document.getElementById('product-grid');
-  const filterBar  = document.getElementById('filter-bar');
   const resultCount = document.getElementById('result-count');
   const marquee    = document.getElementById('marquee');
+  const catGrid    = document.getElementById('cat-grid');
+  const productos  = document.getElementById('productos');
+  const categorias = document.getElementById('categorias');
+  const catLabel   = document.getElementById('cat-label');
+  const catTitle   = document.getElementById('cat-title');
+  const backBtn    = document.getElementById('back-btn');
 
-  let activeCategory = 'Todos';
-
-  /* --- Formato de precio COP --- */
-  function fmtPrice(n) {
-    return '$' + n.toLocaleString('es-CO');
+  /* Foto representativa de cada categoría (primer producto que tenga imagen) */
+  function getCatImg(cat) {
+    const p = PRODUCTS.find(p => p.category === cat);
+    return p ? p.img : '';
   }
 
-  /* --- Renderizar grid de productos --- */
-  function render() {
-    const list = activeCategory === 'Todos'
-      ? PRODUCTS
-      : PRODUCTS.filter(p => p.category === activeCategory);
+  /* Emojis por categoría */
+  const ICONS = {
+    'Accesorios':            '🧢',
+    'Blusas y Tops':         '👚',
+    'Bodies y Corsets':      '🪡',
+    'Buzos y Sudaderas':     '🧥',
+    'Camisetas y Camisas':   '👕',
+    'Chaquetas':             '🧤',
+    'Conjuntos y Enteriozos':'👗',
+    'Faldas':                '🩱',
+    'Licras':                '🩲',
+    'Pantalones y Jeans':    '👖',
+    'Shorts':                '🩳',
+    'Vestidos':              '👘',
+  };
 
+  /* --- Renderizar grid de categorías --- */
+  function renderCategories() {
+    catGrid.innerHTML = CATEGORIES.map(cat => {
+      const n = PRODUCTS.filter(p => p.category === cat).length;
+      const img = getCatImg(cat);
+      const icon = ICONS[cat] || '🛍️';
+      return `
+        <div class="cat-card" data-cat="${cat}">
+          <div class="cat-img">
+            ${img ? `<img src="${img}" alt="${cat}" onerror="this.style.display='none'">` : ''}
+            <div class="cat-overlay">
+              <span class="cat-icon">${icon}</span>
+              <h3>${cat}</h3>
+              <span class="cat-count">${n} productos</span>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    catGrid.querySelectorAll('.cat-card').forEach(card => {
+      card.addEventListener('click', () => selectCategory(card.dataset.cat));
+    });
+  }
+
+  /* --- Seleccionar categoría --- */
+  function selectCategory(cat) {
+    catLabel.textContent = cat.toUpperCase();
+    catTitle.textContent = cat;
+    renderProducts(cat);
+    categorias.style.display = 'none';
+    productos.style.display = 'block';
+    setTimeout(() => {
+      productos.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+  }
+
+  /* --- Volver a categorías --- */
+  backBtn.addEventListener('click', () => {
+    productos.style.display = 'none';
+    categorias.style.display = 'block';
+    setTimeout(() => {
+      categorias.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+  });
+
+  /* --- Renderizar productos de una categoría --- */
+  function renderProducts(cat) {
+    const list = PRODUCTS.filter(p => p.category === cat);
     resultCount.textContent = list.length + (list.length === 1 ? ' producto' : ' productos');
-
-    if (list.length === 0) {
-      grid.innerHTML = '<div class="empty-state">No hay productos en esta categoría todavía.</div>';
-      return;
-    }
 
     grid.innerHTML = list.map(p => `
       <div class="product">
         <div class="product-img">
-          <span class="product-cat-tag">${p.category}</span>
           <img src="${p.img}" alt="${p.name}">
           <div class="placeholder" style="display:none;">
             <div class="ph-icon">+</div>
@@ -41,12 +96,11 @@
           </div>
         </div>
         <h4>${p.name}</h4>
-        <div class="price">${fmtPrice(p.price)}</div>
+        <div class="price">$${p.price.toLocaleString('es-CO')}</div>
         ${p.colors.length ? `<div class="colors">${p.colors.join(' · ')}</div>` : ''}
       </div>
     `).join('');
 
-    /* Mostrar placeholder si la imagen no existe */
     grid.querySelectorAll('.product-img').forEach(box => {
       const img = box.querySelector('img');
       const ph  = box.querySelector('.placeholder');
@@ -57,45 +111,13 @@
     });
   }
 
-  /* --- Renderizar filtros de categoría --- */
-  function renderFilters() {
-    const cats = ['Todos', ...CATEGORIES];
-
-    filterBar.innerHTML = cats.map(c => {
-      const n = c === 'Todos'
-        ? PRODUCTS.length
-        : PRODUCTS.filter(p => p.category === c).length;
-      const isActive = c === activeCategory ? 'active is-gold' : '';
-      return `<button class="filter-chip ${isActive}" data-cat="${c}">
-        ${c} <span style="opacity:.5">(${n})</span>
-      </button>`;
-    }).join('');
-
-    filterBar.querySelectorAll('.filter-chip').forEach(btn => {
-      btn.addEventListener('click', () => {
-        activeCategory = btn.dataset.cat;
-        filterBar.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active', 'is-gold'));
-        btn.classList.add('active', 'is-gold');
-        render();
-      });
-    });
-  }
-
-  /* --- Renderizar marquee --- */
+  /* --- Marquee --- */
   function renderMarquee() {
-    const items = [
-      'ENVÍOS A TODO COLOMBIA',
-      '99 PRODUCTOS DISPONIBLES',
-      'NUEVA COLECCIÓN',
-      'PAGA POR WHATSAPP'
-    ];
-    const doubled = [...items, ...items];
-    marquee.innerHTML = doubled.map(t => `<span>${t}</span>`).join('');
+    const items = ['ENVÍOS A TODO COLOMBIA', '99 PRODUCTOS DISPONIBLES', 'NUEVA COLECCIÓN', 'PAGA POR WHATSAPP'];
+    marquee.innerHTML = [...items, ...items].map(t => `<span>${t}</span>`).join('');
   }
 
-  /* --- Iniciar --- */
-  renderFilters();
-  render();
+  renderCategories();
   renderMarquee();
 
 })();

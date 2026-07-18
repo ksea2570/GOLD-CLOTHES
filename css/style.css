@@ -334,3 +334,79 @@ footer .dorado { color: var(--dorado); font-weight: 700; }
 }
 
 :focus-visible { outline: 2px solid var(--dorado); outline-offset: 3px; }
+
+/* ---------- CATEGORÍAS GRID ---------- */
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--linea);
+  border: 1px solid var(--linea);
+  margin: 0 5vw 60px;
+}
+.cat-card {
+  cursor: pointer;
+  position: relative;
+  background: var(--negro);
+  overflow: hidden;
+}
+.cat-img {
+  aspect-ratio: 3/4;
+  position: relative;
+  overflow: hidden;
+}
+.cat-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0.6;
+  transition: transform 0.5s cubic-bezier(.2,.8,.2,1), opacity 0.3s;
+}
+.cat-card:hover .cat-img img {
+  transform: scale(1.06);
+  opacity: 0.85;
+}
+.cat-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.8) 100%);
+}
+.cat-icon { font-size: 22px; margin-bottom: 6px; }
+.cat-overlay h3 {
+  font-family: 'Archivo Expanded', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 4px;
+}
+.cat-count {
+  font-size: 11px;
+  color: var(--dorado-suave);
+  letter-spacing: 0.08em;
+}
+
+/* ---------- BOTÓN VOLVER ---------- */
+.back-btn {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--dorado);
+  border: 1px solid var(--dorado);
+  padding: 7px 14px;
+  transition: all 0.2s;
+}
+.back-btn:hover {
+  background: var(--dorado);
+  color: var(--negro);
+}
+
+/* ---------- RESPONSIVE CATEGORÍAS ---------- */
+@media (max-width: 860px) {
+  .cat-grid {
+    grid-template-columns: repeat(2, 1fr);
+    margin: 0 6vw 40px;
+  }
+}
