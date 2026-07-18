@@ -490,3 +490,84 @@ footer .dorado { color: var(--dorado); font-weight: 700; }
   text-decoration: none;
 }
 .lightbox-wa:hover { background: #1ebe5d; }
+
+/* ---------- LOGO NAV ---------- */
+.nav-logo-img {
+  height: 48px;
+  width: auto;
+  display: block;
+  filter: brightness(0) invert(1);
+}
+
+/* ---------- BÚSQUEDA ---------- */
+.search-wrap {
+  padding: 24px 5vw 0;
+  position: relative;
+  z-index: 10;
+}
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--linea);
+  padding: 12px 16px;
+  background: #fff;
+  max-width: 480px;
+}
+.search-icon { font-size: 16px; color: #999; }
+.search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  background: transparent;
+  color: var(--negro);
+}
+.search-box input::placeholder { color: #bbb; }
+.search-clear {
+  font-size: 14px;
+  color: #999;
+  cursor: pointer;
+  padding: 0 4px;
+}
+.search-clear:hover { color: var(--negro); }
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 5vw;
+  right: 5vw;
+  max-width: 480px;
+  background: #fff;
+  border: 1px solid var(--linea);
+  border-top: none;
+  max-height: 320px;
+  overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+.search-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--linea);
+  transition: background 0.15s;
+}
+.search-item:hover { background: #fff8e6; }
+.search-item img {
+  width: 44px; height: 44px;
+  object-fit: cover;
+  background: #eee;
+}
+.search-item-info { flex: 1; }
+.search-item-name { font-size: 13px; font-weight: 600; }
+.search-item-cat { font-size: 11px; color: #999; }
+.search-item-price { font-size: 13px; font-weight: 700; color: var(--dorado); font-family: 'Archivo Expanded', sans-serif; }
+.search-empty { padding: 16px; font-size: 13px; color: #999; text-align: center; }
+
+@media (max-width: 860px) {
+  .search-wrap { padding: 20px 6vw 0; }
+  .search-results { left: 6vw; right: 6vw; }
+  .nav-logo-img { height: 38px; }
+}

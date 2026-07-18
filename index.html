@@ -12,7 +12,9 @@
 <body>
 
   <nav>
-    <div class="nav-logo">GOLD CLOTHES</div>
+    <a href="#" class="nav-logo">
+      <img src="logo.png" alt="GOLD CLOTHES" class="nav-logo-img">
+    </a>
     <div class="nav-links">
       <a href="#categorias">Categorías</a>
       <a href="#contacto">Contacto</a>
@@ -33,6 +35,16 @@
     <div class="marquee" id="marquee"></div>
   </div>
 
+  <!-- BÚSQUEDA -->
+  <div class="search-wrap">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" placeholder="Buscar prenda...">
+      <button class="search-clear" id="search-clear" style="display:none;">✕</button>
+    </div>
+    <div class="search-results" id="search-results" style="display:none;"></div>
+  </div>
+
   <!-- CATEGORÍAS -->
   <section id="categorias">
     <div class="section-label">
@@ -44,7 +56,7 @@
     <div class="cat-grid" id="cat-grid"></div>
   </section>
 
-  <!-- PRODUCTOS (oculto hasta que se seleccione categoría) -->
+  <!-- PRODUCTOS -->
   <section id="productos" class="products" style="display:none;">
     <div class="section-label">
       <div>
