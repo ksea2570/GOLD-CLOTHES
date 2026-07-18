@@ -13,13 +13,53 @@
   const catTitle   = document.getElementById('cat-title');
   const backBtn    = document.getElementById('back-btn');
 
-  /* Foto representativa de cada categoría (primer producto que tenga imagen) */
-  function getCatImg(cat) {
-    const p = PRODUCTS.find(p => p.category === cat);
-    return p ? p.img : '';
+  const WA_NUMBER = '573145651803';
+
+  /* --- Lightbox --- */
+  const lightbox = document.createElement('div');
+  lightbox.className = 'lightbox';
+  lightbox.innerHTML = `
+    <div class="lightbox-inner">
+      <span class="lightbox-close">✕</span>
+      <img class="lightbox-img" src="" alt="">
+      <div class="lightbox-name"></div>
+      <div class="lightbox-price"></div>
+      <div class="lightbox-colors"></div>
+      <a class="lightbox-wa" href="" target="_blank" rel="noopener">
+        PEDIR POR WHATSAPP →
+      </a>
+    </div>`;
+  document.body.appendChild(lightbox);
+
+  const lbImg    = lightbox.querySelector('.lightbox-img');
+  const lbName   = lightbox.querySelector('.lightbox-name');
+  const lbPrice  = lightbox.querySelector('.lightbox-price');
+  const lbColors = lightbox.querySelector('.lightbox-colors');
+  const lbWa     = lightbox.querySelector('.lightbox-wa');
+  const lbClose  = lightbox.querySelector('.lightbox-close');
+
+  function openLightbox(p) {
+    lbImg.src       = p.img;
+    lbImg.alt       = p.name;
+    lbName.textContent  = p.name;
+    lbPrice.textContent = '$' + p.price.toLocaleString('es-CO');
+    lbColors.textContent = p.colors.length ? p.colors.join(' · ') : '';
+    const msg = encodeURIComponent(`Hola! Me interesa: *${p.name}* ($${p.price.toLocaleString('es-CO')} COP). ¿Está disponible?`);
+    lbWa.href = `https://wa.me/${WA_NUMBER}?text=${msg}`;
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
   }
 
-  /* Emojis por categoría */
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  lbClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+  /* --- Emojis por categoría --- */
   const ICONS = {
     'Accesorios':            '🧢',
     'Blusas y Tops':         '👚',
@@ -35,7 +75,12 @@
     'Vestidos':              '👘',
   };
 
-  /* --- Renderizar grid de categorías --- */
+  function getCatImg(cat) {
+    const p = PRODUCTS.find(p => p.category === cat);
+    return p ? p.img : '';
+  }
+
+  /* --- Renderizar categorías --- */
   function renderCategories() {
     catGrid.innerHTML = CATEGORIES.map(cat => {
       const n = PRODUCTS.filter(p => p.category === cat).length;
@@ -71,7 +116,7 @@
     }, 50);
   }
 
-  /* --- Volver a categorías --- */
+  /* --- Volver --- */
   backBtn.addEventListener('click', () => {
     productos.style.display = 'none';
     categorias.style.display = 'block';
@@ -80,13 +125,13 @@
     }, 50);
   });
 
-  /* --- Renderizar productos de una categoría --- */
+  /* --- Renderizar productos --- */
   function renderProducts(cat) {
     const list = PRODUCTS.filter(p => p.category === cat);
     resultCount.textContent = list.length + (list.length === 1 ? ' producto' : ' productos');
 
     grid.innerHTML = list.map(p => `
-      <div class="product">
+      <div class="product" data-id="${p.id}" style="cursor:pointer;">
         <div class="product-img">
           <img src="${p.img}" alt="${p.name}">
           <div class="placeholder" style="display:none;">
@@ -107,6 +152,14 @@
       img.addEventListener('error', () => {
         img.style.display = 'none';
         ph.style.display  = 'flex';
+      });
+    });
+
+    /* Clic en producto → lightbox */
+    grid.querySelectorAll('.product').forEach(card => {
+      card.addEventListener('click', () => {
+        const p = PRODUCTS.find(p => p.id === parseInt(card.dataset.id));
+        if (p) openLightbox(p);
       });
     });
   }
