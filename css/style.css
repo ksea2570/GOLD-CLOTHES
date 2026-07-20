@@ -622,3 +622,18 @@ footer .dorado { color: var(--dorado); font-weight: 700; }
   .wa-float { bottom: 20px; right: 20px; padding: 13px 16px; }
   .wa-float span { display: none; }
 }
+
+/* ---------- ORDENAR ---------- */
+.sort-select {
+  border: 1px solid var(--linea);
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--negro);
+  background: var(--blanco);
+  cursor: pointer;
+  padding: 7px 12px;
+  transition: border-color 0.2s;
+}
+.sort-select:hover { border-color: var(--dorado); }
