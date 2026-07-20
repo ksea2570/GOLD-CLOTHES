@@ -19,6 +19,38 @@
   const sortSelect  = document.getElementById('sort-select');
 
   const WA_NUMBER = '573145651803';
+
+  const COLOR_MAP = {
+    'negro':'#1a1a1a','blanco':'#f5f5f5','gris':'#9e9e9e',
+    'rojo':'#e53935','vinotinto':'#6d1b2a','rosado':'#f06292',
+    'rosa':'#f48fb1','fucsia':'#e91e8c','morado':'#7b1fa2',
+    'lila':'#ce93d8','azul oscuro':'#0d47a1','azul cielo':'#4fc3f7',
+    'azul':'#1e88e5','verde oscuro':'#1b5e20','verde agua':'#80cbc4',
+    'verde':'#43a047','amarillo':'#fdd835','naranja':'#fb8c00',
+    'beige':'#d7ccc8','cafe':'#6d4c41','café':'#6d4c41','camel':'#c49a6c',
+    'turquesa':'#00bcd4','dorado':'#ffc107','plateado':'#bdbdbd',
+    'crema':'#fff9c4','salmon':'#ff8a65','coral':'#ff7043',
+    'mostaza':'#f9a825','habano':'#a1887f','perla':'#f5f0e8',
+    'aguamarina':'#4db6ac','marengo':'#546e7a','khaki':'#afb28c',
+    'terracota':'#bf5b3d',
+  };
+
+  function colorToHex(name) {
+    const n = name.toLowerCase().trim();
+    for (const [key, hex] of Object.entries(COLOR_MAP)) {
+      if (n.includes(key)) return hex;
+    }
+    return '#cccccc';
+  }
+
+  function renderColorDots(colors) {
+    if (!colors.length) return '';
+    const dots = colors.map(c =>
+      `<span class="color-dot" style="background:${colorToHex(c)}" title="${c}"></span>`
+    ).join('');
+    return `<div class="color-dots">${dots}</div>`;
+  }
+
   let currentCat  = null;
 
   /* ========== LIGHTBOX ========== */
@@ -46,7 +78,10 @@
     lbImg.src = p.img; lbImg.alt = p.name;
     lbName.textContent   = p.name;
     lbPrice.textContent  = '$' + p.price.toLocaleString('es-CO');
-    lbColors.textContent = p.colors.length ? p.colors.join(' · ') : '';
+    lbColors.innerHTML = p.colors.length
+      ? '<div class="color-dots" style="justify-content:center">' +
+        p.colors.map(c => `<span class="color-dot" style="background:${colorToHex(c)};width:18px;height:18px" title="${c}"></span>`).join('') +
+        '</div>' : '';
     const msg = encodeURIComponent(`Hola! Me interesa: *${p.name}* ($${p.price.toLocaleString('es-CO')} COP). ¿Está disponible?`);
     lbWa.href = `https://wa.me/${WA_NUMBER}?text=${msg}`;
     lightbox.classList.add('active');
@@ -196,7 +231,7 @@
         </div>
         <h4>${p.name}</h4>
         <div class="price">$${p.price.toLocaleString('es-CO')}</div>
-        ${p.colors.length ? `<div class="colors">${p.colors.join(' · ')}</div>` : ''}
+        ${renderColorDots(p.colors)}
       </div>`).join('');
 
     grid.querySelectorAll('.product-img').forEach(box => {
